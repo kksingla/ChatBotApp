@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">DocsApp ChatBot</string>
+
+    <string name="title_activity_main">MainActivity</string>
+
+
+    <string name="hint_enter_your_old_password">Old Password</string>
+    <string name="hint_enter_your_password">New Password</string>
+    <string name="hint_confirm_your_password">Confirm Password</string>
+
+    <string name="forgot_pass">Forgot Password?</string>
+    <string name="don_t_have_an_account_ncreate_a_new_account_now">Don\'t have an account?\nCreate a new account now!</string>
+    <string name="already_have_account">Already have an account?\nGreat! Login Now !!</string>
+
+    <string name="enter_your_e_mail_and_password">Enter your Email and Password</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_pass">Password</string>
+    <string name="save">Save</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="error_name">Please enter your Name</string>
+    <string name="error_email">Please enter your Email Id</string>
+    <string name="error_password">Please enter your Password</string>
+    <string name="enter_old_pass">Please enter old Password</string>
+    <string name="enter_re_new_pass">Please re-enter new Password</string>
+    <string name="new_not_same_old_pass">New Password cannot same as Old Password</string>
+    <string name="confirm_pass_new_pass_not_same">Re-enter Password must same as New Password</string>
+    <string name="pass_change_success">Password Changed Successfully !!</string>
+
+
+    <string name="no_internet">No Internet Connection</string>
+    <string name="server_error">Unable to communicate to the server, please try again later</string>
+    <string name="unknown_error">Unknown error, please try again later</string>
+    <string name="timeout_error">Server Time out, please try again</string>
+
+</resources>

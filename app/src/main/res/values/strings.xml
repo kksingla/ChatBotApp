@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_msg">Hello, Welcome to DocsApp!!\nPlease type your query</string>
+    <string name="send">Send</string>
+    <string name="hint_msg">Type your query</string>
+</resources>
