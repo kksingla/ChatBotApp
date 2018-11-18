@@ -6,11 +6,13 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.docsapp.R;
+import com.docsapp.utils.UIUtils;
 
 /**
  * Created by kushaal singla on 18-Nov-18.
@@ -27,9 +29,13 @@ public class NewUserBottomSheetFragment extends BottomSheetDialogFragment {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (callBack != null) {
-                    callBack.onNewUser(etName.getText().toString());
-                    dismiss();
+                if (!TextUtils.isEmpty(etName.getText().toString())) {
+                    if (callBack != null) {
+                        callBack.onNewUser(etName.getText().toString());
+                        dismiss();
+                    }
+                } else {
+                    UIUtils.makeToast(getString(R.string.empty_name));
                 }
             }
         });
