@@ -14,13 +14,13 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.docsapp.bean.response.MasterResponse;
+import com.docsapp.constants.URLConstants;
+import com.docsapp.utils.UIUtils;
 import com.ks.myutils.utils.DebugUtils;
 import com.ks.myutils.utils.GSONUtils;
 
 import java.lang.reflect.Type;
-
-import com.docsapp.constants.URLConstants;
-import com.docsapp.utils.UIUtils;
 
 public class CustomGSONGetRequest<T> extends Request<T> {
 
@@ -70,6 +70,9 @@ public class CustomGSONGetRequest<T> extends Request<T> {
             DebugUtils.log(response.toString());
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+        if (response instanceof MasterResponse) {
+            ((MasterResponse) response).setTag(Long.valueOf(getTag().toString()));
         }
         listener.onResponse(response);
     }

@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.docsapp.R;
 import com.docsapp.bean.model.MyMessage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.VH> {
@@ -23,11 +22,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.VH> {
     private static final int CLIENT = 1;
     private static final int CHAT_BOT = 0;
     private final LayoutInflater mInflater;
+    private final CallBack callback;
     private Context mContext;
     private List<MyMessage> mMyMessages;
 
-    public ChatAdapter(Context context, List<MyMessage> myMessages) {
+    public ChatAdapter(Context context, ChatAdapter.CallBack callBack, List<MyMessage> myMessages) {
         this.mContext = context;
+        this.callback = callBack;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.mMyMessages = myMessages;
     }
@@ -59,12 +60,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.VH> {
         MyMessage message = mMyMessages.get(position);
         if (message != null) {
             holder.tvMsg.setText(message.getMessage());
+            if (callback != null && message.isPending()) {
+                callback.nonResponseRxMsg(message, position);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
         return mMyMessages != null ? mMyMessages.size() : 0;
+    }
+
+    public interface CallBack {
+        void nonResponseRxMsg(MyMessage myMessage, int pos);
     }
 
     class VH extends RecyclerView.ViewHolder {

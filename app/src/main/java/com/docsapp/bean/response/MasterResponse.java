@@ -13,12 +13,13 @@ public class MasterResponse {
     private String errormessage;
     @SerializedName("success")
     private int success;
+    @SerializedName("tag")
+    private Long tag;
 
     @Override
     public String toString() {
         return GSONUtils.toString(this);
     }
-
 
     public String getErrormessage() {
         return errormessage;
@@ -38,5 +39,13 @@ public class MasterResponse {
 
     public void setSuccess(int success) {
         this.success = success;
+    }
+
+    public void setTag(Long tag) {
+        this.tag = tag;
+    }
+
+    public Long getTag() {
+        return tag;
     }
 }

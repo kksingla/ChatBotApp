@@ -3,6 +3,7 @@ package com.docsapp.bean.model;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.docsapp.enums.RequestStatus;
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "MyMessage")
@@ -20,6 +21,15 @@ public class MyMessage {
     private String chatbotname;
     @SerializedName("externalId")
     private String externalId;
+    @SerializedName("reqStatus")
+    private int reqStatus = RequestStatus.PENDING.getValue();
+
+    public MyMessage(Long tag) {
+        createdOn = tag;
+    }
+
+    public MyMessage() {
+    }
 
     public String getExternalId() {
         return externalId;
@@ -67,5 +77,31 @@ public class MyMessage {
 
     public void setChatbotname(String chatbotname) {
         this.chatbotname = chatbotname;
+    }
+
+    public int getReqStatus() {
+        return reqStatus;
+    }
+
+    public void setReqStatus(int reqStatus) {
+        this.reqStatus = reqStatus;
+    }
+
+    @Override
+    public int hashCode() {
+        return String.valueOf(createdOn).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof MyMessage) {
+            MyMessage bean = (MyMessage) obj;
+            return createdOn == bean.createdOn;
+        }
+        return super.equals(obj);
+    }
+
+    public boolean isPending() {
+        return reqStatus == RequestStatus.PENDING.getValue();
     }
 }

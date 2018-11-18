@@ -28,6 +28,7 @@ import com.docsapp.db.processor.DBAsync;
 import com.docsapp.db.processor.DBError;
 import com.docsapp.db.processor.DBResponse;
 import com.docsapp.db.processor.DBURLConstants;
+import com.docsapp.enums.RequestStatus;
 import com.docsapp.server.CustomGSONGetRequest;
 import com.docsapp.server.VolleySingleton;
 
@@ -35,10 +36,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements ChatAdapter.CallBack {
 
     private RecyclerView rvChat;
     private List<MyMessage> myMessagesList;
+    private List<MyMessage> requestQueue;
     private ChatAdapter mAdapter;
     private TextView tvSend;
     private TextView tvFallback;
@@ -47,6 +49,7 @@ public class MainActivity extends BaseActivity {
     private static final int CHAT_BOT_ID = 63906;
     private String externalID;
     private MyChatHead selectedUser;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,7 +90,7 @@ public class MainActivity extends BaseActivity {
         if (myMessagesList != null && !myMessagesList.isEmpty()) {
             tvFallback.setVisibility(View.GONE);
             if (mAdapter == null) {
-                mAdapter = new ChatAdapter(this, myMessagesList);
+                mAdapter = new ChatAdapter(this, this, myMessagesList);
                 rvChat.setAdapter(mAdapter);
 
             } else {
@@ -102,6 +105,7 @@ public class MainActivity extends BaseActivity {
         } else {
             tvFallback.setVisibility(View.VISIBLE);
         }
+
     }
 
 
@@ -143,8 +147,8 @@ public class MainActivity extends BaseActivity {
             public void onClick(View view) {
                 MyMessage message = new MyMessage();
                 message.setMessage(etChatMsg.getText().toString());
-                addMsg(message);
-                callNewMessageAPI(message.getMessage(), selectedUser.getName());
+                addMsg(message, null);
+                callNewMessageAPI(message.getMessage(), selectedUser.getName(), message.getCreatedOn());
                 etChatMsg.setText("");
             }
         });
@@ -160,7 +164,7 @@ public class MainActivity extends BaseActivity {
         tvSend.setAlpha(.3f);
     }
 
-    private void callNewMessageAPI(String message, String name) {
+    private void callNewMessageAPI(String message, String name, long createdOn) {
         try {
             HashMap<String, Object> map = new HashMap<>();
             map.put("apiKey", "6nt5d1nJHkqbkphe");
@@ -169,15 +173,15 @@ public class MainActivity extends BaseActivity {
             map.put("chatBotID", CHAT_BOT_ID);
             map.put("externalID", externalID);
 
-            CustomGSONGetRequest<ChatResponse> request = new CustomGSONGetRequest<>(this, URLConstants.CHAT,
+            final CustomGSONGetRequest<ChatResponse> request = new CustomGSONGetRequest<>(this, URLConstants.CHAT,
                     ChatResponse.class, getMapToString(map),
                     new Response.Listener<ChatResponse>() {
                         @Override
                         public void onResponse(ChatResponse response) {
                             try {
-                                if (response.isSuccess()) {
-                                    addMsg(response.getMessage());
-                                } else {
+                                if (response.isSuccess())
+                                    addMsg(response.getMessage(), response.getTag());
+                                else {
                                     makeToast(response.getErrormessage());
                                 }
                             } catch (Exception e) {
@@ -188,28 +192,40 @@ public class MainActivity extends BaseActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            handleVolleyError(error);
+//                            handleVolleyError(error);
                         }
                     }, false, null);
+            request.setTag(createdOn);
             VolleySingleton.getInstance().getRequestQueue().add(request);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    private void addMsg(MyMessage message) {
+    private void addMsg(MyMessage message, Long tag) {
         if (myMessagesList == null) {
             myMessagesList = new ArrayList<>();
         }
         message.setExternalId(externalID);
+        if (tag != null) {
+            int index = myMessagesList.indexOf(new MyMessage(tag));
+            if (index >= 0) {
+                requestQueue.remove(new MyMessage(tag));
+                myMessagesList.get(index).setReqStatus(RequestStatus.COMPLETE.getValue());
+                message.setReqStatus(RequestStatus.COMPLETE.getValue());
+            }
+        } else {
+            message.setReqStatus(RequestStatus.INIT.getValue());
+        }
         myMessagesList.add(message);
         setData();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         if (myMessagesList != null && !myMessagesList.isEmpty()) {
+
             DBAsync dbAsync = new DBAsync.Builder<>(DBURLConstants.INSERT_MSGs,
                     new DBResponse.Listener<Boolean>() {
                         @Override
@@ -228,9 +244,15 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void nonResponseRxMsg(MyMessage myMessage, int pos) {
+        if (requestQueue == null) {
+            requestQueue = new ArrayList<>();
+        }
 
+        int index = requestQueue.indexOf(myMessage);
+        if (index < 0) {
+            requestQueue.add(myMessage);
+            callNewMessageAPI(myMessage.getMessage(), selectedUser.getName(), myMessage.getCreatedOn());
+        }
     }
-
 }
