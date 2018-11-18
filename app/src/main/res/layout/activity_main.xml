@@ -32,13 +32,13 @@
             android:id="@+id/et_chat_msg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp4"
+            android:layout_margin="@dimen/dp6"
             android:layout_weight="1"
             android:background="@drawable/bg_chat_box"
             android:hint="@string/hint_msg"
             android:inputType="textMultiLine"
             android:maxLines="5"
-            android:padding="@dimen/dp6" />
+            android:padding="@dimen/dp8" />
 
         <TextView
             android:id="@+id/tv_send"
