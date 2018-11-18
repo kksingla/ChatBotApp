@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.android.volley.VolleyError;
+import com.docsapp.bean.model.MyChatHead;
+import com.docsapp.constants.IntentConstants;
 import com.docsapp.utils.AndroidUtils;
 import com.ks.myutils.activity.KKActivity;
 
@@ -81,7 +83,12 @@ public abstract class BaseActivity extends KKActivity {
         return this;
     }
 
-    public void openMainActivity() {
-        startActivity(new Intent(this, MainActivity.class));
+    public void openMainActivity(MyChatHead chat) {
+        startActivity(new Intent(this, MainActivity.class)
+                .putExtra(IntentConstants.SELECTED_USER, chat));
+    }
+
+    public void openChatListActivity() {
+        startActivity(new Intent(this, ChatListActivity.class));
     }
 }

@@ -5,4 +5,5 @@ package com.docsapp.constants;
  */
 
 public interface IntentConstants {
+    String SELECTED_USER = "SELECTED_USER";
 }

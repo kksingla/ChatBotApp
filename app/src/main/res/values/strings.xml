@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="no_msg">Hello, Welcome to DocsApp!!\nPlease type your query</string>
+    <string name="no_msg">Hello %s, Welcome to DocsApp!!\nPlease type your query</string>
     <string name="send">Send</string>
     <string name="hint_msg">Type your query</string>
     <string name="title">ChatBot</string>
+    <string name="no_chat_found">No Chat Found</string>
+    <string name="start_chat">Start Chat</string>
+    <string name="your_name">Your Name</string>
+    <string name="welcome_to_docsapp_can_i_get_your_name">Welcome to DocsApp!! Can i get your Name?</string>
 </resources>

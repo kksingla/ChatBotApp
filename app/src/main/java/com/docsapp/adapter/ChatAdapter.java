@@ -16,6 +16,7 @@ import com.docsapp.R;
 import com.docsapp.bean.model.MyMessage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.VH> {
 
@@ -23,9 +24,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.VH> {
     private static final int CHAT_BOT = 0;
     private final LayoutInflater mInflater;
     private Context mContext;
-    private ArrayList<MyMessage> mMyMessages;
+    private List<MyMessage> mMyMessages;
 
-    public ChatAdapter(Context context, ArrayList<MyMessage> myMessages) {
+    public ChatAdapter(Context context, List<MyMessage> myMessages) {
         this.mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.mMyMessages = myMessages;
@@ -75,7 +76,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.VH> {
         }
     }
 
-    public void setMyMessages(ArrayList<MyMessage> mMyMessages) {
+    public void setMyMessages(List<MyMessage> mMyMessages) {
         this.mMyMessages = mMyMessages;
         notifyDataSetChanged();
     }
